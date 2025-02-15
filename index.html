@@ -7,7 +7,68 @@
     <title>VAAV</title>
   </head>
   <body>
-    <p>v0.01</p>
+    <div class="app-container">
+      <div class="header">
+        <h1>Very Awesome Algorithm Visualiser</h1>
+      </div>
+
+      <div class="tab tab-visualiser">
+        <div class="sorting-container">
+          <div class="bars-container" id="bars-container"></div>
+        </div>
+      </div>
+
+      <div class="tab tab-control-panel">
+        <div class="control-panel">
+          <div class="controls">
+            <button class="btn btn-array-size" id="size-s" data-array-size="8">
+              small - 8
+            </button>
+            <button class="btn btn-array-size" id="size-m" data-array-size="16">
+              medium - 16
+            </button>
+            <button class="btn btn-array-size" id="size-l" data-array-size="32">
+              large - 32
+            </button>
+
+            <input
+              type="range"
+              class="input-field algorithm-speed-bar"
+              id="algorithm-speed-bar"
+              min="1"
+              max="10"
+              value="3"
+            />
+
+            <select class="algorithm-select" id="input-field algorithm-select">
+              <option value="bubble">Bubble Sort</option>
+              <option value="merge">Merge Sort</option>
+              <option value="quick">Quick Sort</option>
+            </select>
+
+            <button class="btn" id="start-sort">Start Sorting</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab tab-code-display">
+        <div class="stats-container">
+          <div class="stats-item">
+            <h4>Comparisons</h4>
+            <p id="comparisons">0</p>
+          </div>
+          <div class="stats-item">
+            <h4>Swaps</h4>
+            <p id="swaps">0</p>
+          </div>
+        </div>
+        <div class="code-display"></div>
+      </div>
+
+      <div class="footer">
+        <p>v0.02</p>
+      </div>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>
