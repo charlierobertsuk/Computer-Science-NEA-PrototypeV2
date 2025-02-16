@@ -1,14 +1,38 @@
+:root {
+  --button: #2563eb;
+  --button-hover: #0b4df3;
+  --background-primary: #0f172a;
+  --background-secondary: #1e293b;
+  --background-tertiary: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --comparing-bar: #f59e0b;
+  --unsorted-bar: #3b82f6;
+  --sorted-bar: #22c55e;
+  --bar-pivot: #ef4444;
+  --disabled: #9ca3af;
+  --universal-transition-speed: all 0.2s ease;
+}
 body {
   margin: 0;
   padding: 10vw; /* veiwport width */
+  background-color: var(--background-primary);
 }
 
 .header {
   text-align: center;
+  color: var(--text-primary);
+}
+
+.tab {
+  background-color: var(--background-secondary);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 20px;
 }
 
 .sorting-container {
-  background: darkgray;
+  background: var(--background-secondary);
   padding: 20px;
   border-radius: 10px;
 }
@@ -22,34 +46,35 @@ body {
 }
 
 .sorting-bar {
-  background-color: blue;
+  background-color: var(--unsorted-bar);
   min-width: 25px;
+  border-radius: 10px 10px 0 0;
   transition: height 0.25s ease; /* smooth bar movement when swapping */
 }
 
 .sorting-bar.is-comparing {
-  background-color: red;
+  background-color: var(--comparing-bar);
 }
 
 .sorting-bar.is-sorted {
-  background-color: green;
+  background-color: var(--sorted-bar);
 }
 
 .btn {
   padding: 5px;
   border: none;
   border-radius: 10px;
-  background-color: blue;
-  color: white;
+  background-color: var(--button);
+  color: var(--text-primary);
   cursor: pointer;
 }
 
 .btn:hover {
-  background-color: darkblue;
+  background-color: var(--button-hover);
 }
 
 .btn:disabled {
-  background-color: grey;
+  background-color: var(--disabled);
   cursor: not-allowed;
 }
 
@@ -66,13 +91,18 @@ body {
 }
 
 .stats-item {
-  background: darkgray;
+  background: var(--background-tertiary);
   padding: 20px;
   border-radius: 10px;
 }
 
+.stats-item p {
+  color: var(--text-secondary);
+}
+
 .stats-item h4 {
   margin-top: 0;
+  color: var(--text-primary);
 }
 
 .footer {
