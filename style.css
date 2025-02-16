@@ -82,7 +82,7 @@ body {
 .btn,
 .input-field {
   width: 100%;
-  margin: 10px 0 10px 0;
+  margin: 10px 0 10px 0; /* top right bottom left */
 }
 
 .algorithm-select {
@@ -110,6 +110,7 @@ body {
 }
 
 .stats-item h4 {
+  /* margin-top keeps h4 closest to the top of the box (dosent leave big gap between box top edge and title) */
   margin-top: 0;
   color: var(--text-primary);
 }
