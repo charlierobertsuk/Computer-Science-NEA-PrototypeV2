@@ -84,6 +84,14 @@ body {
   margin: 10px 0 10px 0;
 }
 
+.algorithm-select {
+  background-color: var(--background-tertiary);
+  color: var(--text-primary);
+  text-align: center;
+  padding: 5px;
+  border-radius: 10px;
+}
+
 .stats-container {
   display: grid;
   gap: 10px;
