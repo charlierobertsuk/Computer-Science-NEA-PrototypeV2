@@ -15,7 +15,7 @@
 }
 body {
   margin: 0;
-  padding: 10vw; /* veiwport width */
+  padding: 0 10vw 0 10vw; /* veiwport width */
   background-color: var(--background-primary);
 }
 
