@@ -1,0 +1,80 @@
+body {
+  margin: 0;
+  padding: 10vw; /* veiwport width */
+}
+
+.header {
+  text-align: center;
+}
+
+.sorting-container {
+  background: darkgray;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.bars-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; /* flex-end, flex-stard & center :) */
+  height: 200px;
+  gap: 4px; /* gap between the bars */
+}
+
+.sorting-bar {
+  background-color: blue;
+  min-width: 25px;
+  transition: height 0.25s ease; /* smooth bar movement when swapping */
+}
+
+.sorting-bar.is-comparing {
+  background-color: red;
+}
+
+.sorting-bar.is-sorted {
+  background-color: green;
+}
+
+.btn {
+  padding: 5px;
+  border: none;
+  border-radius: 10px;
+  background-color: blue;
+  color: white;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: darkblue;
+}
+
+.btn:disabled {
+  background-color: grey;
+  cursor: not-allowed;
+}
+
+.btn,
+.input-field {
+  width: 100%;
+  margin: 10px 0 10px 0;
+}
+
+.stats-container {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.stats-item {
+  background: darkgray;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.stats-item h4 {
+  margin-top: 0;
+}
+
+.footer {
+  text-align: center;
+}
