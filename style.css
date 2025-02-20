@@ -47,7 +47,7 @@ body {
 
 .sorting-bar {
   background-color: var(--unsorted-bar);
-  min-width: 25px;
+  width: 30px;
   border-radius: 10px 10px 0 0;
   /* smooth bar movement when swapping */
   transition: var(--universal-transition-speed);
