@@ -7,7 +7,7 @@ class AlgorithmVisualiser {
     this.isRunning = false;
     this.comparisons = 0;
     this.swaps = 0;
-    this.animationSpeed = 407; // option 3 default speed
+    this.animationSpeed = this.calculateAnimationSpeed(3); // Default speed for slider value 3
     this.defaultSize = 16; // default array size - will change with screen size (mobile 8, default 16, wideish 32)
 
     // DOM
