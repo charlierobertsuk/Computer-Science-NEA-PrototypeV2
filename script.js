@@ -15,6 +15,7 @@ class AlgorithmVisualiser {
     this.startButton = document.getElementById("start-sort");
     this.sizeButtons = document.querySelectorAll(".btn-array-size");
     this.speedInput = document.getElementById("algorithm-speed-bar");
+    this.algorithmSelect = document.getElementById("algorithm-select");
 
     // event listeners
     this.startButton.addEventListener("click", () => this.startSorting());
@@ -100,7 +101,18 @@ class AlgorithmVisualiser {
     this.isRunning = true;
     this.toggleButtons(false);
 
-    await this.bubbleSort();
+    switch (this.algorithmSelect.value) {
+      case "bubble":
+        await this.bubbleSort();
+        break;
+      case "merge":
+        await this.mergeSort(0, this.array.length - 1);
+        break;
+      case "quick":
+        /* await this.quickSort(0, this.array.length - 1); */
+        console.log("quick sort coming soon!");
+        break;
+    }
 
     this.finishSorting();
   }
@@ -117,6 +129,73 @@ class AlgorithmVisualiser {
       }
       this.bars[this.array.length - i - 1].classList.add("is-sorted");
     }
+  }
+
+  async mergeSort(left, right) {
+    if (left < right) {
+      const mid = Math.floor((left + right) / 2);
+      await this.mergeSort(left, mid);
+      await this.mergeSort(mid + 1, right);
+      await this.merge(left, mid, right);
+    }
+  }
+
+  async merge(left, mid, right) {
+    const leftArr = this.array.slice(left, mid + 1);
+    const rightArr = this.array.slice(mid + 1, right + 1);
+    const tempBars = this.bars.slice(left, right + 1);
+
+    let i = 0,
+      j = 0,
+      k = left;
+
+    // move bars up to show what is currently being focused/sorted
+    tempBars.forEach((bar) => (bar.style.transform = "translateY(-10px)"));
+    await this.wait();
+
+    while (i < leftArr.length && j < rightArr.length) {
+      this.bars[k].classList.add("is-comparing");
+      await this.wait();
+
+      this.comparisons++;
+      document.getElementById("comparisons").textContent = this.comparisons;
+
+      if (leftArr[i] <= rightArr[j]) {
+        this.array[k] = leftArr[i];
+        this.updateBar(k, left + i);
+        i++;
+      } else {
+        this.array[k] = rightArr[j];
+        this.updateBar(k, mid + 1 + j);
+        j++;
+      }
+      this.bars[k].classList.remove("is-comparing");
+      k++;
+    }
+
+    while (i < leftArr.length) {
+      this.array[k] = leftArr[i];
+      this.updateBar(k, left + i);
+      i++;
+      k++;
+    }
+
+    while (j < rightArr.length) {
+      this.array[k] = rightArr[j];
+      this.updateBar(k, mid + 1 + j);
+      j++;
+      k++;
+    }
+
+    // bars back to ariginal position
+    tempBars.forEach((bar) => (bar.style.transform = "translateY(0)"));
+    tempBars.forEach((bar) => bar.classList.add("is-sorted"));
+    await this.wait();
+  }
+
+  updateBar(index) {
+    this.bars[index].style.height = `${this.array[index] * 2}px`;
+    this.numbers[index].textContent = this.array[index];
   }
 
   async compareAndSwap(i, j) {
