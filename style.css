@@ -66,6 +66,10 @@ body {
   background-color: var(--bar-pivot);
 }
 
+.sorting-bar.is-temp {
+  background-color: var(--temp-sort);
+}
+
 .btn {
   padding: 5px;
   border: none;
