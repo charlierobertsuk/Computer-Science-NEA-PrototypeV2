@@ -222,11 +222,8 @@ class AlgorithmVisualiser {
     this.array[i] = this.array[j];
     this.array[j] = temp;
 
-    this.bars[i].style.height = `${this.array[i] * 2}px`;
-    this.bars[j].style.height = `${this.array[j] * 2}px`;
-
-    this.numbers[i].textContent = this.array[i];
-    this.numbers[j].textContent = this.array[j];
+    this.updateBar(i);
+    this.updateBar(j);
 
     await this.wait();
   }
