@@ -103,24 +103,29 @@ body {
 }
 
 .stats-container {
-  display: grid;
-  gap: 10px;
-  margin-top: 10px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: auto;
 }
 
 .stats-item {
-  background: var(--background-tertiary);
-  padding: 20px;
-  border-radius: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-align: right;
 }
 
 .stats-item p {
   color: var(--text-secondary);
+  margin: 0;
 }
 
 .stats-item h4 {
   /* margin-top keeps h4 closest to the top of the box (dosent leave big gap between box top edge and title) */
-  margin-top: 0;
+  margin: 0;
   color: var(--text-primary);
 }
 
@@ -135,5 +140,10 @@ body {
 .btn-array-size {
   flex: 1; /* each button takes up an equal amount of space */
   min-width: 200px;
+  padding: 10px;
+}
+
+.tab-visualiser {
+  position: relative;
   padding: 10px;
 }
