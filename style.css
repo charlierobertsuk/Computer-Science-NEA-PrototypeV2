@@ -123,3 +123,17 @@ body {
   margin-top: 0;
   color: var(--text-primary);
 }
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px;
+}
+
+.btn-array-size {
+  flex: 1; /* each button takes up an equal amount of space */
+  min-width: 200px;
+  padding: 10px;
+}
