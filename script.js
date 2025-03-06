@@ -76,7 +76,7 @@ class AlgorithmVisualiser {
     // resets buttons and stuff after sorting
     this.isRunning = false;
     this.toggleButtons(true);
-    this.startButton.disabled = true;
+    this.startButton.disabled = false;
     this.bars.forEach((bar) => bar.classList.add("is-sorted"));
     this.timeTaken = (performance.now() - this.startTime) / 1000;
     this.statsTimeTaken.textContent = `${this.timeTaken.toFixed(1)}s`; // toFixed is rounding to decimal figures
@@ -110,8 +110,8 @@ class AlgorithmVisualiser {
     // disables/toggles buttons as the sorting begins
     if (this.isRunning) return;
     this.isRunning = true;
-    this.startTime = performance.now();
     this.toggleButtons(false);
+    this.startTime = performance.now();
 
     switch (this.algorithmSelect.value) {
       case "bubble":
@@ -156,7 +156,6 @@ class AlgorithmVisualiser {
     const rightArr = this.array.slice(mid + 1, right + 1);
     const tempBars = this.bars.slice(left, right + 1);
 
-    // move bars up to show what is currently being focused/sorted
     tempBars.forEach((bar) => (bar.style.transform = "translateY(-10px)"));
     await this.wait();
 
@@ -198,7 +197,6 @@ class AlgorithmVisualiser {
       k++;
     }
 
-    // bars back to ariginal position
     tempBars.forEach((bar) => (bar.style.transform = "translateY(0)"));
     tempBars.forEach((bar) => bar.classList.add("is-sorted"));
     await this.wait();
@@ -344,35 +342,65 @@ class DualAlgorithmVisualiser {
 
     this.startButton = document.getElementById("start-sort");
     this.startButton.addEventListener("click", () => {
-      if (
-        this.visualiser1.algorithmSelect.value ===
-        this.visualiser2.algorithmSelect.value
-      ) {
-        alert("Please select different algorithms for comparison.");
-        return;
-      }
       this.visualiser1.startSorting();
-      this.visualiser2.startSorting();
+      if (this.secondVisualizer.classList.contains("visible")) {
+        this.visualiser2.startSorting();
+      }
     });
 
     this.compareButton = document.getElementById("compare-btn");
+    this.secondVisualizer = document.getElementById("visualiser-2");
+    this.secondSelector = document.getElementById(
+      "algorithm-select-2-container"
+    );
+
+    this.allAlgorithms = [
+      { value: "bubble", text: "Bubble Sort" },
+      { value: "merge", text: "Merge Sort" },
+      { value: "quick", text: "Quick Sort" },
+    ];
+    this.updateSecondPicker();
+
     this.compareButton.addEventListener("click", () => {
-      const secondVisualizer = document.getElementById("visualiser-2");
-      const secondSelector = document.getElementById(
-        "algorithm-select-2-container"
-      );
-      secondVisualizer.classList.toggle("visible");
-      secondSelector.style.display = secondVisualizer.classList.contains(
-        "visible"
-      )
-        ? "block"
-        : "none";
-      this.compareButton.textContent = secondVisualizer.classList.contains(
+      this.secondVisualizer.classList.toggle("visible");
+      this.secondSelector.style.display =
+        this.secondVisualizer.classList.contains("visible") ? "block" : "none";
+      this.compareButton.textContent = this.secondVisualizer.classList.contains(
         "visible"
       )
         ? "Hide Comparison"
         : "Compare";
     });
+
+    this.visualiser1.algorithmSelect.addEventListener("change", () => {
+      this.updateSecondPicker();
+    });
+    this.visualiser2.algorithmSelect.addEventListener("change", () => {
+      this.visualiser2.updateTitle();
+    });
+  }
+
+  updateSecondPicker() {
+    const selectedAlgo1 = this.visualiser1.algorithmSelect.value;
+    const currentAlgo2 = this.visualiser2.algorithmSelect.value;
+    this.visualiser2.algorithmSelect.innerHTML = "";
+
+    const availableAlgorithms = this.allAlgorithms.filter(
+      (algo) => algo.value !== selectedAlgo1
+    );
+    availableAlgorithms.forEach((algo) => {
+      const option = document.createElement("option");
+      option.value = algo.value;
+      option.text = algo.text;
+      this.visualiser2.algorithmSelect.appendChild(option);
+    });
+
+    if (availableAlgorithms.some((algo) => algo.value === currentAlgo2)) {
+      this.visualiser2.algorithmSelect.value = currentAlgo2;
+    } else {
+      this.visualiser2.algorithmSelect.value = availableAlgorithms[0].value;
+    }
+    this.visualiser2.updateTitle();
   }
 }
 
