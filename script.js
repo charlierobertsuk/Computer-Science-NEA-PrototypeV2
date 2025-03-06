@@ -319,6 +319,11 @@ class DualAlgorithmVisualiser {
       speedInput
     );
 
+    // syncronise arrays when first compared
+    this.visualiser2.array = [...this.visualiser1.array];
+    this.visualiser2.originalArray = [...this.visualiser1.originalArray];
+    this.visualiser2.renderBars();
+
     this.sizeButtons = document.querySelectorAll(".btn-array-size");
     this.sizeButtons.forEach((button) => {
       button.addEventListener("click", () => {
@@ -339,13 +344,11 @@ class DualAlgorithmVisualiser {
 
     this.startButton = document.getElementById("start-sort");
     this.startButton.addEventListener("click", () => {
-      // dont listen to click start, listen to the dropdown
       if (
         this.visualiser1.algorithmSelect.value ===
         this.visualiser2.algorithmSelect.value
       ) {
-        alert("Oi! You cant compare the same thing! :(");
-        // NOTE: just disable the start button if the selected values are the same. even listener for selection?
+        alert("Please select different algorithms for comparison.");
         return;
       }
       this.visualiser1.startSorting();
@@ -355,7 +358,15 @@ class DualAlgorithmVisualiser {
     this.compareButton = document.getElementById("compare-btn");
     this.compareButton.addEventListener("click", () => {
       const secondVisualizer = document.getElementById("visualiser-2");
+      const secondSelector = document.getElementById(
+        "algorithm-select-2-container"
+      );
       secondVisualizer.classList.toggle("visible");
+      secondSelector.style.display = secondVisualizer.classList.contains(
+        "visible"
+      )
+        ? "block"
+        : "none";
       this.compareButton.textContent = secondVisualizer.classList.contains(
         "visible"
       )
@@ -366,10 +377,3 @@ class DualAlgorithmVisualiser {
 }
 
 window.addEventListener("load", () => new DualAlgorithmVisualiser()); // loads visualiser
-
-// Next up: When initialy pressing the compare button the arrays are different
-//          but when you generate when they are both open, they are the same.
-//          Please make sure that the arrays are always the same before sorting.
-
-// Also, hide the second dropdown when it is only a single visualiser, and label which ones which.
-// Maybe a 50 50 on the panel next to each other with a title above..

@@ -177,3 +177,24 @@ body {
   padding: 10px 20px;
   margin: 10px 0 0 0;
 }
+
+.algorithm-selectors {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.selector-container {
+  flex: 1;
+  text-align: center;
+}
+
+.selector-container h4 {
+  margin: 5px 0;
+  color: var(--text-primary);
+}
+
+#algorithm-select-2-container {
+  display: none; /* hidden by default, don't want to see it till compare menu is up */
+}

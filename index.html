@@ -83,23 +83,30 @@
               value="3"
             />
 
-            <select
-              class="input-field algorithm-select"
-              id="algorithm-select-1"
-            >
-              <option value="bubble">Bubble Sort</option>
-              <option value="merge">Merge Sort</option>
-              <option value="quick">Quick Sort</option>
-            </select>
-
-            <select
-              class="input-field algorithm-select"
-              id="algorithm-select-2"
-            >
-              <option value="merge">Merge Sort</option>
-              <option value="bubble">Bubble Sort</option>
-              <option value="quick">Quick Sort</option>
-            </select>
+            <div class="algorithm-selectors">
+              <div class="selector-container">
+                <h4>Algorithm 1</h4>
+                <select
+                  class="input-field algorithm-select"
+                  id="algorithm-select-1"
+                >
+                  <option value="bubble">Bubble Sort</option>
+                  <option value="merge">Merge Sort</option>
+                  <option value="quick">Quick Sort</option>
+                </select>
+              </div>
+              <div class="selector-container" id="algorithm-select-2-container">
+                <h4>Algorithm 2</h4>
+                <select
+                  class="input-field algorithm-select"
+                  id="algorithm-select-2"
+                >
+                  <option value="merge">Merge Sort</option>
+                  <option value="bubble">Bubble Sort</option>
+                  <option value="quick">Quick Sort</option>
+                </select>
+              </div>
+            </div>
 
             <button class="btn" id="start-sort">Start Sorting</button>
           </div>
