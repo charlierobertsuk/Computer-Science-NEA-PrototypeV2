@@ -1,5 +1,5 @@
 class AlgorithmVisualiser {
-  constructor() {
+  constructor(containerId, statsId, titleId, algorithmSelectId, speedInput) {
     this.array = [];
     this.bars = [];
     this.originalArray = [];
@@ -7,32 +7,42 @@ class AlgorithmVisualiser {
     this.isRunning = false;
     this.comparisons = 0;
     this.swaps = 0;
-    this.animationSpeed = this.calculateAnimationSpeed(3); // Default speed for slider value 3
+    this.timeTaken = 0;
+    this.startTime = null;
+    this.animationSpeed = this.calculateAnimationSpeed(3);
     this.defaultSize = 16; // default array size - will change with screen size (mobile 8, default 16, wideish 32)
 
     // DOM
-    this.barsContainer = document.getElementById("bars-container");
+    this.barsContainer = document.getElementById(
+      `bars-container-${containerId}`
+    );
+    this.statsComparisons = document.getElementById(
+      `comparisons-${containerId}`
+    );
+    this.statsSwaps = document.getElementById(`swaps-${containerId}`);
+    this.statsTimeTaken = document.getElementById(`time-taken-${containerId}`);
+    this.titleElement = document.getElementById(
+      `visualiser-${containerId}-title`
+    );
     this.startButton = document.getElementById("start-sort");
     this.sizeButtons = document.querySelectorAll(".btn-array-size");
-    this.speedInput = document.getElementById("algorithm-speed-bar");
-    this.algorithmSelect = document.getElementById("algorithm-select");
+    this.speedInput = speedInput;
+    this.algorithmSelect = document.getElementById(
+      `algorithm-select-${containerId}`
+    );
 
-    // event listeners
-    this.startButton.addEventListener("click", () => this.startSorting());
-    window.addEventListener("resize", () => this.renderBars());
-    this.sizeButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const size = parseInt(button.getAttribute("data-array-size")); // gets the selected array size
-        this.generateArray(size); // regenerate the new array
-      });
-    });
-
-    this.speedInput.addEventListener("input", (e) => {
-      const sliderValue = parseInt(e.target.value);
-      this.animationSpeed = this.calculateAnimationSpeed(sliderValue);
+    this.algorithmSelect.addEventListener("change", () => {
+      this.updateTitle();
     });
 
     this.generateArray(this.defaultSize);
+    this.updateTitle();
+  }
+
+  updateTitle() {
+    const algorithmName =
+      this.algorithmSelect.options[this.algorithmSelect.selectedIndex].text;
+    this.titleElement.textContent = algorithmName;
   }
 
   generateArray(size) {
@@ -51,8 +61,7 @@ class AlgorithmVisualiser {
     this.barsContainer.innerHTML = ""; // clear any current existing bars
     this.bars = [];
     this.numbers = [];
-    const displayedArray = this.array;
-    displayedArray.forEach((value) => {
+    this.array.forEach((value) => {
       const barContainer = this.createBarContainer(value);
       this.barsContainer.appendChild(barContainer);
     });
@@ -69,6 +78,8 @@ class AlgorithmVisualiser {
     this.toggleButtons(true);
     this.startButton.disabled = true;
     this.bars.forEach((bar) => bar.classList.add("is-sorted"));
+    this.timeTaken = (performance.now() - this.startTime) / 1000;
+    this.statsTimeTaken.textContent = `${this.timeTaken.toFixed(1)}s`; // toFixed is rounding to decimal figures
   }
 
   createBarContainer(value) {
@@ -99,6 +110,7 @@ class AlgorithmVisualiser {
     // disables/toggles buttons as the sorting begins
     if (this.isRunning) return;
     this.isRunning = true;
+    this.startTime = performance.now();
     this.toggleButtons(false);
 
     switch (this.algorithmSelect.value) {
@@ -144,28 +156,28 @@ class AlgorithmVisualiser {
     const rightArr = this.array.slice(mid + 1, right + 1);
     const tempBars = this.bars.slice(left, right + 1);
 
-    let i = 0,
-      j = 0,
-      k = left;
-
     // move bars up to show what is currently being focused/sorted
     tempBars.forEach((bar) => (bar.style.transform = "translateY(-10px)"));
     await this.wait();
+
+    let i = 0,
+      j = 0,
+      k = left;
 
     while (i < leftArr.length && j < rightArr.length) {
       this.bars[k].classList.add("is-comparing");
       await this.wait();
 
       this.comparisons++;
-      document.getElementById("comparisons").textContent = this.comparisons;
+      this.statsComparisons.textContent = this.comparisons;
 
       if (leftArr[i] <= rightArr[j]) {
         this.array[k] = leftArr[i];
-        this.updateBar(k, left + i);
+        this.updateBar(k);
         i++;
       } else {
         this.array[k] = rightArr[j];
-        this.updateBar(k, mid + 1 + j);
+        this.updateBar(k);
         j++;
       }
       this.bars[k].classList.remove("is-comparing");
@@ -174,14 +186,14 @@ class AlgorithmVisualiser {
 
     while (i < leftArr.length) {
       this.array[k] = leftArr[i];
-      this.updateBar(k, left + i);
+      this.updateBar(k);
       i++;
       k++;
     }
 
     while (j < rightArr.length) {
       this.array[k] = rightArr[j];
-      this.updateBar(k, mid + 1 + j);
+      this.updateBar(k);
       j++;
       k++;
     }
@@ -211,7 +223,7 @@ class AlgorithmVisualiser {
       await this.wait();
 
       this.comparisons++;
-      document.getElementById("comparisons").textContent = this.comparisons;
+      this.statsComparisons.textContent = this.comparisons;
 
       if (this.array[j] < pivot) {
         i++;
@@ -239,7 +251,7 @@ class AlgorithmVisualiser {
     await this.wait();
 
     this.comparisons++;
-    document.getElementById("comparisons").textContent = this.comparisons;
+    this.statsComparisons.textContent = this.comparisons;
 
     if (this.array[i] > this.array[j]) {
       await this.swap(i, j);
@@ -251,7 +263,7 @@ class AlgorithmVisualiser {
 
   async swap(i, j) {
     this.swaps++;
-    document.getElementById("swaps").textContent = this.swaps;
+    this.statsSwaps.textContent = this.swaps;
 
     const temp = this.array[i];
     this.array[i] = this.array[j];
@@ -273,14 +285,90 @@ class AlgorithmVisualiser {
     this.isRunning = false;
     this.comparisons = 0;
     this.swaps = 0;
-    document.getElementById("comparisons").textContent = "0";
-    document.getElementById("swaps").textContent = "0";
+    this.timeTaken = 0;
+    this.statsComparisons.textContent = "0";
+    this.statsSwaps.textContent = "0";
+    this.statsTimeTaken.textContent = "0s";
     this.startButton.disabled = false;
     this.toggleButtons(true);
     this.bars.forEach((bar) =>
-      bar.classList.remove("is-comparing", "is-sorted")
+      bar.classList.remove("is-comparing", "is-sorted", "is-pivot")
     );
+  }
+
+  setAnimationSpeed(speed) {
+    this.animationSpeed = speed;
   }
 }
 
-window.addEventListener("load", () => new AlgorithmVisualiser()); // loads visualiser
+class DualAlgorithmVisualiser {
+  constructor() {
+    const speedInput = document.getElementById("algorithm-speed-bar");
+    this.visualiser1 = new AlgorithmVisualiser(
+      1,
+      "stats-container-1",
+      "visualiser-1-title",
+      "algorithm-select-1",
+      speedInput
+    );
+    this.visualiser2 = new AlgorithmVisualiser(
+      2,
+      "stats-container-2",
+      "visualiser-2-title",
+      "algorithm-select-2",
+      speedInput
+    );
+
+    this.sizeButtons = document.querySelectorAll(".btn-array-size");
+    this.sizeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const size = parseInt(button.getAttribute("data-array-size")); // gets the selected array size
+        this.visualiser1.generateArray(size); // regenerate the new array
+        this.visualiser2.array = [...this.visualiser1.array];
+        this.visualiser2.originalArray = [...this.visualiser1.originalArray];
+        this.visualiser2.renderBars();
+      });
+    });
+
+    speedInput.addEventListener("input", (e) => {
+      const sliderValue = parseInt(e.target.value);
+      const newSpeed = this.visualiser1.calculateAnimationSpeed(sliderValue);
+      this.visualiser1.setAnimationSpeed(newSpeed);
+      this.visualiser2.setAnimationSpeed(newSpeed);
+    });
+
+    this.startButton = document.getElementById("start-sort");
+    this.startButton.addEventListener("click", () => {
+      if (
+        this.visualiser1.algorithmSelect.value ===
+        this.visualiser2.algorithmSelect.value
+      ) {
+        alert("Oi! You cant compare the same thing! :(");
+        // NOTE: just disable the start button if the selected values are the same. even listener for selection?
+        return;
+      }
+      this.visualiser1.startSorting();
+      this.visualiser2.startSorting();
+    });
+
+    this.compareButton = document.getElementById("compare-btn");
+    this.compareButton.addEventListener("click", () => {
+      const secondVisualizer = document.getElementById("visualiser-2");
+      secondVisualizer.classList.toggle("visible");
+      this.compareButton.textContent = secondVisualizer.classList.contains(
+        "visible"
+      )
+        ? "Hide Comparison"
+        : "Compare";
+    });
+  }
+}
+
+window.addEventListener("load", () => new DualAlgorithmVisualiser()); // loads visualiser
+
+// Next up: When initialy pressing the compare button the arrays are different
+//          but when you generate when they are both open, they are the same.
+//          Please make sure that the arrays are always the same before sorting.
+
+// Also, hide the second dropdown when it is only a single visualiser, and label which ones which.
+// Maybe a 50 50 on the panel next to each other with a title above..

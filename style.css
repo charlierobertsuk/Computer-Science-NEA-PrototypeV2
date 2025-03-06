@@ -14,6 +14,7 @@
   --disabled: #9ca3af;
   --universal-transition-speed: all 0.2s ease;
 }
+
 body {
   margin: 0;
   padding: 0 10vw 0 10vw; /* veiwport width */
@@ -109,7 +110,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  width: auto;
+  width: 150px;
+  background-color: var(--background-tertiary);
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .stats-item {
@@ -146,4 +150,30 @@ body {
 .tab-visualiser {
   position: relative;
   padding: 10px;
+}
+
+.visualiser-split {
+  display: flex;
+  flex-direction: column;
+}
+
+.visualiser-container {
+  position: relative;
+  width: 100%;
+}
+
+.nested-visualiser {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+
+.nested-visualiser.visible {
+  max-height: 300px;
+}
+
+.compare-btn {
+  width: auto;
+  padding: 10px 20px;
+  margin: 10px 0 0 0;
 }

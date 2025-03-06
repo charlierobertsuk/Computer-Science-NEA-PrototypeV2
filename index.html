@@ -14,7 +14,7 @@
 
       <div class="tab tab-visualiser">
         <div class="visualiser-split">
-          <div class="visualiser-container">
+          <div class="visualiser-container" id="visualiser-1">
             <h3 id="visualiser-1-title">Algorithm 1</h3>
             <div class="stats-container" id="stats-container-1">
               <div class="stats-item">
@@ -25,25 +25,37 @@
                 <h4>Swaps</h4>
                 <p id="swaps-1">0</p>
               </div>
+              <div class="stats-item">
+                <h4>Time Taken</h4>
+                <p id="time-taken-1">0s</p>
+              </div>
             </div>
             <div class="sorting-container">
               <div class="bars-container" id="bars-container-1"></div>
             </div>
-          </div>
-          <div class="visualiser-container">
-            <h3 id="visualiser-2-title">Algorithm 2</h3>
-            <div class="stats-container" id="stats-container-2">
-              <div class="stats-item">
-                <h4>Comparisons</h4>
-                <p id="comparisons-2">0</p>
+            <button class="btn compare-btn" id="compare-btn">Compare</button>
+            <div
+              class="visualiser-container nested-visualiser"
+              id="visualiser-2"
+            >
+              <h3 id="visualiser-2-title">Algorithm 2</h3>
+              <div class="stats-container" id="stats-container-2">
+                <div class="stats-item">
+                  <h4>Comparisons</h4>
+                  <p id="comparisons-2">0</p>
+                </div>
+                <div class="stats-item">
+                  <h4>Swaps</h4>
+                  <p id="swaps-2">0</p>
+                </div>
+                <div class="stats-item">
+                  <h4>Time Taken</h4>
+                  <p id="time-taken-2">0s</p>
+                </div>
               </div>
-              <div class="stats-item">
-                <h4>Swaps</h4>
-                <p id="swaps-2">0</p>
+              <div class="sorting-container">
+                <div class="bars-container" id="bars-container-2"></div>
               </div>
-            </div>
-            <div class="sorting-container">
-              <div class="bars-container" id="bars-container-2"></div>
             </div>
           </div>
         </div>
@@ -73,10 +85,19 @@
 
             <select
               class="input-field algorithm-select"
-              id="algorithm-select"
+              id="algorithm-select-1"
             >
               <option value="bubble">Bubble Sort</option>
               <option value="merge">Merge Sort</option>
+              <option value="quick">Quick Sort</option>
+            </select>
+
+            <select
+              class="input-field algorithm-select"
+              id="algorithm-select-2"
+            >
+              <option value="merge">Merge Sort</option>
+              <option value="bubble">Bubble Sort</option>
               <option value="quick">Quick Sort</option>
             </select>
 
@@ -88,6 +109,7 @@
       <div class="tab tab-code-display">
         <div class="code-display"></div>
       </div>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>
