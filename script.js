@@ -10,7 +10,8 @@ class AlgorithmVisualiser {
     this.timeTaken = 0;
     this.startTime = null;
     this.animationSpeed = this.calculateAnimationSpeed(3);
-    this.defaultSize = 16; // default array size - will change with screen size (mobile 8, default 16, wideish 32)
+    this.defaultSize = 16;
+    this.timer = null;
 
     // DOM
     this.barsContainer = document.getElementById(
@@ -69,17 +70,33 @@ class AlgorithmVisualiser {
 
   calculateAnimationSpeed(sliderValue) {
     // slider values in multiples of 1 to 10
-    return 1000 * Math.pow(50 / 1000, sliderValue / 10); // exponential decreace in time
+    return 1000 * Math.pow(50 / 1000, sliderValue / 10); // exponential decrease in time
+  }
+
+  startTimer() {
+    this.timeTaken = 0;
+    this.statsTimeTaken.textContent = `${this.timeTaken.toFixed(1)}s`;
+    this.timer = setInterval(() => {
+      this.timeTaken += 0.1;
+      this.statsTimeTaken.textContent = `${this.timeTaken.toFixed(1)}s`;
+    }, 100);
+  }
+
+  stopTimer() {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+    this.timeTaken = (performance.now() - this.startTime) / 1000;
+    this.statsTimeTaken.textContent = `${this.timeTaken.toFixed(1)}s`;
   }
 
   finishSorting() {
-    // resets buttons and stuff after sorting
     this.isRunning = false;
     this.toggleButtons(true);
     this.startButton.disabled = false;
     this.bars.forEach((bar) => bar.classList.add("is-sorted"));
-    this.timeTaken = (performance.now() - this.startTime) / 1000;
-    this.statsTimeTaken.textContent = `${this.timeTaken.toFixed(1)}s`; // toFixed is rounding to decimal figures
+    this.stopTimer();
   }
 
   createBarContainer(value) {
@@ -107,11 +124,11 @@ class AlgorithmVisualiser {
   }
 
   async startSorting() {
-    // disables/toggles buttons as the sorting begins
     if (this.isRunning) return;
     this.isRunning = true;
     this.toggleButtons(false);
     this.startTime = performance.now();
+    this.startTimer();
 
     switch (this.algorithmSelect.value) {
       case "bubble":
@@ -274,12 +291,10 @@ class AlgorithmVisualiser {
   }
 
   wait() {
-    // it waits the animation speed time
     return new Promise((resolve) => setTimeout(resolve, this.animationSpeed));
   }
 
   reset() {
-    // visualiser reset
     this.isRunning = false;
     this.comparisons = 0;
     this.swaps = 0;
@@ -292,6 +307,10 @@ class AlgorithmVisualiser {
     this.bars.forEach((bar) =>
       bar.classList.remove("is-comparing", "is-sorted", "is-pivot")
     );
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
   }
 
   setAnimationSpeed(speed) {
