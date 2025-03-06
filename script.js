@@ -339,6 +339,7 @@ class DualAlgorithmVisualiser {
 
     this.startButton = document.getElementById("start-sort");
     this.startButton.addEventListener("click", () => {
+      // dont listen to click start, listen to the dropdown
       if (
         this.visualiser1.algorithmSelect.value ===
         this.visualiser2.algorithmSelect.value
