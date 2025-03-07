@@ -414,22 +414,26 @@ class DualAlgorithmVisualiser {
   }
 
   updateSecondPicker() {
-    const selectedAlgo1 = this.visualiser1.algorithmSelect.value;
-    const currentAlgo2 = this.visualiser2.algorithmSelect.value;
+    const selectedAlgorithm1 = this.visualiser1.algorithmSelect.value;
+    const currentAlgorithm2 = this.visualiser2.algorithmSelect.value;
     this.visualiser2.algorithmSelect.innerHTML = "";
 
     const availableAlgorithms = this.allAlgorithms.filter(
-      (algo) => algo.value !== selectedAlgo1
+      (algorithm) => algorithm.value !== selectedAlgorithm1
     );
-    availableAlgorithms.forEach((algo) => {
+    availableAlgorithms.forEach((algorithm) => {
       const option = document.createElement("option");
-      option.value = algo.value;
-      option.text = algo.text;
+      option.value = algorithm.value;
+      option.text = algorithm.text;
       this.visualiser2.algorithmSelect.appendChild(option);
     });
 
-    if (availableAlgorithms.some((algo) => algo.value === currentAlgo2)) {
-      this.visualiser2.algorithmSelect.value = currentAlgo2;
+    if (
+      availableAlgorithms.some(
+        (algorithm) => algorithm.value === currentAlgorithm2
+      )
+    ) {
+      this.visualiser2.algorithmSelect.value = currentAlgorithm2;
     } else {
       this.visualiser2.algorithmSelect.value = availableAlgorithms[0].value;
     }
