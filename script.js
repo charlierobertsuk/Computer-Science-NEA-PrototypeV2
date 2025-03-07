@@ -1,5 +1,5 @@
 class AlgorithmVisualiser {
-  constructor(containerId, statsId, titleId, algorithmSelectId, speedInput) {
+  constructor(containerId, statsId, titleId, algorithmSelectId) {
     this.array = [];
     this.bars = [];
     this.originalArray = [];
@@ -9,7 +9,7 @@ class AlgorithmVisualiser {
     this.swaps = 0;
     this.timeTaken = 0;
     this.startTime = null;
-    this.animationSpeed = this.calculateAnimationSpeed(3);
+    this.animationSpeed = 100; // Default to "Normal" (100ms)
     this.defaultSize = 16;
     this.timer = null;
 
@@ -27,7 +27,7 @@ class AlgorithmVisualiser {
     );
     this.startButton = document.getElementById("start-sort");
     this.sizeButtons = document.querySelectorAll(".btn-array-size");
-    this.speedInput = speedInput;
+    this.speedButtons = document.querySelectorAll(".btn-speed"); // Add speed buttons
     this.algorithmSelect = document.getElementById(
       `algorithm-select-${containerId}`
     );
@@ -66,11 +66,6 @@ class AlgorithmVisualiser {
       const barContainer = this.createBarContainer(value);
       this.barsContainer.appendChild(barContainer);
     });
-  }
-
-  calculateAnimationSpeed(sliderValue) {
-    // slider values in multiples of 1 to 10
-    return 1000 * Math.pow(50 / 1000, sliderValue / 10); // exponential decrease in time
   }
 
   startTimer() {
@@ -147,6 +142,7 @@ class AlgorithmVisualiser {
 
   toggleButtons(enable) {
     this.sizeButtons.forEach((button) => (button.disabled = !enable));
+    this.speedButtons.forEach((button) => (button.disabled = !enable)); // Disable/enable speed buttons
     this.startButton.disabled = !enable;
   }
 
@@ -320,20 +316,17 @@ class AlgorithmVisualiser {
 
 class DualAlgorithmVisualiser {
   constructor() {
-    const speedInput = document.getElementById("algorithm-speed-bar");
     this.visualiser1 = new AlgorithmVisualiser(
       1,
       "stats-container-1",
       "visualiser-1-title",
-      "algorithm-select-1",
-      speedInput
+      "algorithm-select-1"
     );
     this.visualiser2 = new AlgorithmVisualiser(
       2,
       "stats-container-2",
       "visualiser-2-title",
-      "algorithm-select-2",
-      speedInput
+      "algorithm-select-2"
     );
 
     // syncronise arrays when first compared
@@ -352,11 +345,32 @@ class DualAlgorithmVisualiser {
       });
     });
 
-    speedInput.addEventListener("input", (e) => {
-      const sliderValue = parseInt(e.target.value);
-      const newSpeed = this.visualiser1.calculateAnimationSpeed(sliderValue);
-      this.visualiser1.setAnimationSpeed(newSpeed);
-      this.visualiser2.setAnimationSpeed(newSpeed);
+    const speedSlow = document.getElementById("speed-slow");
+    const speedNormal = document.getElementById("speed-normal");
+    const speedFast = document.getElementById("speed-fast");
+
+    speedNormal.classList.add("selected");
+
+    speedSlow.addEventListener("click", () => {
+      this.visualiser1.setAnimationSpeed(1000);
+      this.visualiser2.setAnimationSpeed(1000);
+      speedSlow.classList.add("selected");
+      speedNormal.classList.remove("selected");
+      speedFast.classList.remove("selected");
+    });
+    speedNormal.addEventListener("click", () => {
+      this.visualiser1.setAnimationSpeed(100);
+      this.visualiser2.setAnimationSpeed(100);
+      speedSlow.classList.remove("selected");
+      speedNormal.classList.add("selected");
+      speedFast.classList.remove("selected");
+    });
+    speedFast.addEventListener("click", () => {
+      this.visualiser1.setAnimationSpeed(5);
+      this.visualiser2.setAnimationSpeed(5);
+      speedSlow.classList.remove("selected");
+      speedNormal.classList.remove("selected");
+      speedFast.classList.add("selected");
     });
 
     this.startButton = document.getElementById("start-sort");

@@ -198,3 +198,21 @@ body {
 #algorithm-select-2-container {
   display: none; /* hidden by default, don't want to see it till compare menu is up */
 }
+
+.speed-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin: 10px 0; /* top right bottom left */
+}
+
+.btn-speed {
+  flex: 1;
+  max-width: 120px;
+  padding: 10px;
+}
+
+.btn-speed.selected {
+  outline: 3px solid var(--text-primary);
+}
