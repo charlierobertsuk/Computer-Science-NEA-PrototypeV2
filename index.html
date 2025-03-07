@@ -7,6 +7,114 @@
     <title>VAAV</title>
   </head>
   <body>
+    <div class="app-container">
+      <div class="header">
+        <h1>Very Awesome Algorithm Visualiser</h1>
+      </div>
+
+      <div class="tab tab-visualiser">
+        <div class="visualiser-split">
+          <div class="visualiser-container" id="visualiser-1">
+            <h3 id="visualiser-1-title">Algorithm 1</h3>
+            <div class="stats-container" id="stats-container-1">
+              <div class="stats-item">
+                <h4>Comparisons</h4>
+                <p id="comparisons-1">0</p>
+              </div>
+              <div class="stats-item">
+                <h4>Swaps</h4>
+                <p id="swaps-1">0</p>
+              </div>
+              <div class="stats-item">
+                <h4>Time Taken</h4>
+                <p id="time-taken-1">0s</p>
+              </div>
+            </div>
+            <div class="sorting-container">
+              <div class="bars-container" id="bars-container-1"></div>
+            </div>
+            <button class="btn compare-btn" id="compare-btn">Compare</button>
+            <div
+              class="visualiser-container nested-visualiser"
+              id="visualiser-2"
+            >
+              <h3 id="visualiser-2-title">Algorithm 2</h3>
+              <div class="stats-container" id="stats-container-2">
+                <div class="stats-item">
+                  <h4>Comparisons</h4>
+                  <p id="comparisons-2">0</p>
+                </div>
+                <div class="stats-item">
+                  <h4>Swaps</h4>
+                  <p id="swaps-2">0</p>
+                </div>
+                <div class="stats-item">
+                  <h4>Time Taken</h4>
+                  <p id="time-taken-2">0s</p>
+                </div>
+              </div>
+              <div class="sorting-container">
+                <div class="bars-container" id="bars-container-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab tab-control-panel">
+        <div class="control-panel">
+          <div class="controls">
+            <button class="btn btn-array-size" id="size-s" data-array-size="8">
+              Small - 8
+            </button>
+            <button class="btn btn-array-size" id="size-m" data-array-size="16">
+              Medium - 16
+            </button>
+            <button class="btn btn-array-size" id="size-l" data-array-size="32">
+              Large - 32
+            </button>
+
+            <!-- Replaced slider with buttons -->
+            <div class="speed-buttons">
+              <button class="btn btn-speed" id="speed-slow">Slow</button>
+              <button class="btn btn-speed" id="speed-normal">Normal</button>
+              <button class="btn btn-speed" id="speed-fast">Fast</button>
+            </div>
+
+            <div class="algorithm-selectors">
+              <div class="selector-container">
+                <h4>Algorithm 1</h4>
+                <select
+                  class="input-field algorithm-select"
+                  id="algorithm-select-1"
+                >
+                  <option value="bubble">Bubble Sort</option>
+                  <option value="merge">Merge Sort</option>
+                  <option value="quick">Quick Sort</option>
+                </select>
+              </div>
+              <div class="selector-container" id="algorithm-select-2-container">
+                <h4>Algorithm 2</h4>
+                <select
+                  class="input-field algorithm-select"
+                  id="algorithm-select-2"
+                >
+                  <option value="merge">Merge Sort</option>
+                  <option value="bubble">Bubble Sort</option>
+                  <option value="quick">Quick Sort</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="btn" id="start-sort">Start Sorting</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab tab-code-display">
+        <div class="code-display"></div>
+      </div>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>
