@@ -1,0 +1,218 @@
+:root {
+  --button: #2563eb;
+  --button-hover: #0b4df3;
+  --background-primary: #0f172a;
+  --background-secondary: #1e293b;
+  --background-tertiary: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --comparing-bar: #f59e0b;
+  --unsorted-bar: #3b82f6;
+  --sorted-bar: #22c55e;
+  --bar-pivot: #ef4444;
+  --temp-sort: #8b5cf6;
+  --disabled: #9ca3af;
+  --universal-transition-speed: all 0.2s ease;
+}
+
+body {
+  margin: 0;
+  padding: 0 10vw 0 10vw; /* veiwport width */
+  background-color: var(--background-primary);
+}
+
+.header {
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.tab {
+  background-color: var(--background-secondary);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.sorting-container {
+  background: var(--background-secondary);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.bars-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; /* flex-end, flex-stard & center :) */
+  height: 200px;
+  gap: 4px; /* gap between the bars */
+}
+
+.sorting-bar {
+  background-color: var(--unsorted-bar);
+  width: 30px;
+  border-radius: 10px 10px 0 0;
+  /* smooth bar movement when swapping */
+  transition: var(--universal-transition-speed);
+}
+
+.sorting-bar.is-comparing {
+  background-color: var(--comparing-bar);
+}
+
+.sorting-bar.is-sorted {
+  background-color: var(--sorted-bar);
+}
+
+.sorting-bar.is-pivot {
+  background-color: var(--bar-pivot);
+}
+
+.sorting-bar.is-temp {
+  background-color: var(--temp-sort);
+}
+
+.btn {
+  padding: 5px;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--button);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: var(--button-hover);
+}
+
+.btn:disabled {
+  background-color: var(--disabled);
+  cursor: not-allowed;
+}
+
+.btn,
+.input-field {
+  width: 100%;
+  margin: 10px 0 10px 0; /* top right bottom left */
+}
+
+.algorithm-select {
+  background-color: var(--background-tertiary);
+  color: var(--text-primary);
+  text-align: center;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.stats-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 150px;
+  background-color: var(--background-tertiary);
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.stats-item {
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-align: right;
+}
+
+.stats-item p {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.stats-item h4 {
+  /* margin-top keeps h4 closest to the top of the box (dosent leave big gap between box top edge and title) */
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px;
+}
+
+.btn-array-size {
+  flex: 1; /* each button takes up an equal amount of space */
+  min-width: 200px;
+  padding: 10px;
+}
+
+.tab-visualiser {
+  position: relative;
+  padding: 10px;
+}
+
+.visualiser-split {
+  display: flex;
+  flex-direction: column;
+}
+
+.visualiser-container {
+  position: relative;
+  width: 100%;
+}
+
+.nested-visualiser {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+
+.nested-visualiser.visible {
+  max-height: 300px;
+}
+
+.compare-btn {
+  width: auto;
+  padding: 10px 20px;
+  margin: 10px 0 0 0;
+}
+
+.algorithm-selectors {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.selector-container {
+  flex: 1;
+  text-align: center;
+}
+
+.selector-container h4 {
+  margin: 5px 0;
+  color: var(--text-primary);
+}
+
+#algorithm-select-2-container {
+  display: none; /* hidden by default, don't want to see it till compare menu is up */
+}
+
+.speed-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin: 10px 0; /* top right bottom left */
+}
+
+.btn-speed {
+  flex: 1;
+  max-width: 120px;
+  padding: 10px;
+}
+
+.btn-speed.selected {
+  outline: 3px solid var(--text-primary);
+}
