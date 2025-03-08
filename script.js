@@ -9,7 +9,7 @@ class AlgorithmVisualiser {
     this.swaps = 0;
     this.timeTaken = 0;
     this.startTime = null;
-    this.animationSpeed = 100; // Default to "Normal" (100ms)
+    this.animationSpeed = 100;
     this.defaultSize = 16;
     this.timer = null;
 
@@ -27,7 +27,7 @@ class AlgorithmVisualiser {
     );
     this.startButton = document.getElementById("start-sort");
     this.sizeButtons = document.querySelectorAll(".btn-array-size");
-    this.speedButtons = document.querySelectorAll(".btn-speed"); // Add speed buttons
+    this.speedButtons = document.querySelectorAll(".btn-speed");
     this.algorithmSelect = document.getElementById(
       `algorithm-select-${containerId}`
     );
@@ -142,7 +142,7 @@ class AlgorithmVisualiser {
 
   toggleButtons(enable) {
     this.sizeButtons.forEach((button) => (button.disabled = !enable));
-    this.speedButtons.forEach((button) => (button.disabled = !enable)); // Disable/enable speed buttons
+    this.speedButtons.forEach((button) => (button.disabled = !enable));
     this.startButton.disabled = !enable;
   }
 
@@ -414,26 +414,22 @@ class DualAlgorithmVisualiser {
   }
 
   updateSecondPicker() {
-    const selectedAlgorithm1 = this.visualiser1.algorithmSelect.value;
-    const currentAlgorithm2 = this.visualiser2.algorithmSelect.value;
+    const selectedAlgo1 = this.visualiser1.algorithmSelect.value;
+    const currentAlgo2 = this.visualiser2.algorithmSelect.value;
     this.visualiser2.algorithmSelect.innerHTML = "";
 
     const availableAlgorithms = this.allAlgorithms.filter(
-      (algorithm) => algorithm.value !== selectedAlgorithm1
+      (algo) => algo.value !== selectedAlgo1
     );
-    availableAlgorithms.forEach((algorithm) => {
+    availableAlgorithms.forEach((algo) => {
       const option = document.createElement("option");
-      option.value = algorithm.value;
-      option.text = algorithm.text;
+      option.value = algo.value;
+      option.text = algo.text;
       this.visualiser2.algorithmSelect.appendChild(option);
     });
 
-    if (
-      availableAlgorithms.some(
-        (algorithm) => algorithm.value === currentAlgorithm2
-      )
-    ) {
-      this.visualiser2.algorithmSelect.value = currentAlgorithm2;
+    if (availableAlgorithms.some((algo) => algo.value === currentAlgo2)) {
+      this.visualiser2.algorithmSelect.value = currentAlgo2;
     } else {
       this.visualiser2.algorithmSelect.value = availableAlgorithms[0].value;
     }
@@ -441,4 +437,83 @@ class DualAlgorithmVisualiser {
   }
 }
 
-window.addEventListener("load", () => new DualAlgorithmVisualiser()); // loads visualiser
+class LoadingScreen {
+  constructor(onComplete) {
+    this.container = document.getElementById("loading-bars");
+    this.onComplete = onComplete;
+    this.createBars();
+  }
+
+  createBars() {
+    this.bars = Array.from(
+      { length: 10 },
+      () => Math.floor(Math.random() * 99) + 1
+    );
+    this.bars.forEach((height) => {
+      const bar = document.createElement("div");
+      bar.className = "loading-bar";
+      bar.style.height = `${height * 2}px`;
+      this.container.appendChild(bar);
+    });
+    this.barElements = Array.from(this.container.children);
+  }
+
+  async animateBubbleSort() {
+    for (let i = 0; i < this.bars.length; i++) {
+      for (let j = 0; j < this.bars.length - i - 1; j++) {
+        this.barElements[j].classList.add("is-comparing");
+        this.barElements[j + 1].classList.add("is-comparing");
+        await this.wait(50);
+
+        if (this.bars[j] > this.bars[j + 1]) {
+          this.swapBars(j, j + 1);
+        }
+
+        this.barElements[j].classList.remove("is-comparing");
+        this.barElements[j + 1].classList.remove("is-comparing");
+      }
+      this.barElements[this.bars.length - i - 1].classList.add("is-sorted");
+    }
+    this.hideLoadingScreen();
+  }
+
+  swapBars(i, j) {
+    const temp = this.bars[i];
+    this.bars[i] = this.bars[j];
+    this.bars[j] = temp;
+
+    this.barElements[i].style.height = `${this.bars[i] * 2}px`;
+    this.barElements[j].style.height = `${this.bars[j] * 2}px`;
+  }
+
+  wait(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async hideLoadingScreen() {
+    await this.wait(500);
+    document.getElementById("loading-screen").style.display = "none";
+    document.querySelector(".app-container").style.display = "block";
+    if (this.onComplete) this.onComplete();
+  }
+}
+
+// initialise the app instaed
+class AppInitialiser {
+  constructor() {
+    this.loadingScreen = null;
+    this.visualiser = null;
+    this.init();
+  }
+
+  init() {
+    this.loadingScreen = new LoadingScreen(() => {
+      this.visualiser = new DualAlgorithmVisualiser();
+    });
+    this.loadingScreen.animateBubbleSort();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  window.app = new AppInitialiser();
+});
