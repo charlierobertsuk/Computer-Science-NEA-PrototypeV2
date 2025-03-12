@@ -12,6 +12,7 @@ class AlgorithmVisualiser {
     this.animationSpeed = 100;
     this.defaultSize = 16;
     this.timer = null;
+    this.finished = false;
 
     // DOM
     this.barsContainer = document.getElementById(
@@ -50,7 +51,7 @@ class AlgorithmVisualiser {
     if (this.isRunning) return;
     const uniqueValues = new Set();
     while (uniqueValues.size < size) {
-      uniqueValues.add(Math.floor(Math.random() * 99) + 1); // random int between 1 and 100
+      uniqueValues.add(Math.floor(Math.random() * 99) + 1);
     }
     this.array = Array.from(uniqueValues);
     this.originalArray = [...this.array];
@@ -59,7 +60,7 @@ class AlgorithmVisualiser {
   }
 
   renderBars() {
-    this.barsContainer.innerHTML = ""; // clear any current existing bars
+    this.barsContainer.innerHTML = "";
     this.bars = [];
     this.numbers = [];
     this.array.forEach((value) => {
@@ -88,8 +89,8 @@ class AlgorithmVisualiser {
 
   finishSorting() {
     this.isRunning = false;
-    this.toggleButtons(true);
-    this.startButton.disabled = false;
+    this.finished = true;
+    this.startButton.disabled = true;
     this.bars.forEach((bar) => bar.classList.add("is-sorted"));
     this.stopTimer();
   }
@@ -101,9 +102,9 @@ class AlgorithmVisualiser {
     const bar = document.createElement("div");
     bar.className = "sorting-bar";
 
-    bar.style.height = `${value * 2}px`; // bars are double the height for twice the depth
+    bar.style.height = `${value * 2}px`;
 
-    const numberLabel = document.createElement("div"); // number label styling
+    const numberLabel = document.createElement("div");
     numberLabel.className = "number-label";
     numberLabel.textContent = `${value}`;
     numberLabel.style.color = "var(--text-primary)";
@@ -119,8 +120,9 @@ class AlgorithmVisualiser {
   }
 
   async startSorting() {
-    if (this.isRunning) return;
+    if (this.isRunning || !this.isArrayReset()) return;
     this.isRunning = true;
+    this.finished = false;
     this.toggleButtons(false);
     this.startTime = performance.now();
     this.startTimer();
@@ -169,7 +171,7 @@ class AlgorithmVisualiser {
     const rightArr = this.array.slice(mid + 1, right + 1);
     const tempBars = this.bars.slice(left, right + 1);
 
-    tempBars.forEach((bar) => (bar.style.transform = "translateY(-10px)"));
+    tempBars.forEach((bar) => bar.classList.add("is-temp"));
     await this.wait();
 
     let i = 0,
@@ -210,7 +212,7 @@ class AlgorithmVisualiser {
       k++;
     }
 
-    tempBars.forEach((bar) => (bar.style.transform = "translateY(0)"));
+    tempBars.forEach((bar) => bar.classList.remove("is-temp"));
     tempBars.forEach((bar) => bar.classList.add("is-sorted"));
     await this.wait();
   }
@@ -307,10 +309,16 @@ class AlgorithmVisualiser {
       clearInterval(this.timer);
       this.timer = null;
     }
+    this.array = [...this.originalArray];
+    this.renderBars();
   }
 
   setAnimationSpeed(speed) {
     this.animationSpeed = speed;
+  }
+
+  isArrayReset() {
+    return this.array.every((val, idx) => val === this.originalArray[idx]);
   }
 }
 
@@ -329,7 +337,6 @@ class DualAlgorithmVisualiser {
       "algorithm-select-2"
     );
 
-    // syncronise arrays when first compared
     this.visualiser2.array = [...this.visualiser1.array];
     this.visualiser2.originalArray = [...this.visualiser1.originalArray];
     this.visualiser2.renderBars();
@@ -337,40 +344,27 @@ class DualAlgorithmVisualiser {
     this.sizeButtons = document.querySelectorAll(".btn-array-size");
     this.sizeButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        const size = parseInt(button.getAttribute("data-array-size")); // gets the selected array size
-        this.visualiser1.generateArray(size); // regenerate the new array
+        const size = parseInt(button.getAttribute("data-array-size"));
+        this.visualiser1.generateArray(size);
         this.visualiser2.array = [...this.visualiser1.array];
         this.visualiser2.originalArray = [...this.visualiser1.originalArray];
         this.visualiser2.renderBars();
       });
     });
 
-    const speedSlow = document.getElementById("speed-slow");
-    const speedNormal = document.getElementById("speed-normal");
+    const speedSlow = document.getElementById("step-by-step");
+    const speedNormal = document.getElementById("skip");
     const speedFast = document.getElementById("speed-fast");
 
     speedNormal.classList.add("selected");
 
     speedSlow.addEventListener("click", () => {
-      this.visualiser1.setAnimationSpeed(1000);
-      this.visualiser2.setAnimationSpeed(1000);
       speedSlow.classList.add("selected");
       speedNormal.classList.remove("selected");
-      speedFast.classList.remove("selected");
     });
     speedNormal.addEventListener("click", () => {
-      this.visualiser1.setAnimationSpeed(100);
-      this.visualiser2.setAnimationSpeed(100);
       speedSlow.classList.remove("selected");
       speedNormal.classList.add("selected");
-      speedFast.classList.remove("selected");
-    });
-    speedFast.addEventListener("click", () => {
-      this.visualiser1.setAnimationSpeed(5);
-      this.visualiser2.setAnimationSpeed(5);
-      speedSlow.classList.remove("selected");
-      speedNormal.classList.remove("selected");
-      speedFast.classList.add("selected");
     });
 
     this.startButton = document.getElementById("start-sort");
@@ -378,6 +372,17 @@ class DualAlgorithmVisualiser {
       this.visualiser1.startSorting();
       if (this.secondVisualizer.classList.contains("visible")) {
         this.visualiser2.startSorting();
+        Promise.all([
+          this.waitForFinish(this.visualiser1),
+          this.waitForFinish(this.visualiser2),
+        ]).then(() => {
+          this.visualiser1.toggleButtons(true);
+          this.visualiser2.toggleButtons(true);
+        });
+      } else {
+        this.waitForFinish(this.visualiser1).then(() => {
+          this.visualiser1.toggleButtons(true);
+        });
       }
     });
 
@@ -434,6 +439,16 @@ class DualAlgorithmVisualiser {
       this.visualiser2.algorithmSelect.value = availableAlgorithms[0].value;
     }
     this.visualiser2.updateTitle();
+  }
+
+  waitForFinish(visualiser) {
+    return new Promise((resolve) => {
+      const check = () => {
+        if (visualiser.finished) resolve();
+        else setTimeout(check, 100);
+      };
+      check();
+    });
   }
 }
 
